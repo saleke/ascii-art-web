@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="static/style.css">
     <title>ASCII ART WEB</title>
 </head>
 <body>
@@ -34,7 +34,7 @@
             </details>
         </section>
 
-        <form action="/ascii-art-web" method="post">
+        <form action="/switch-ascii" method="get">
 
             <section class="input">
                 <p>Enter Text:</p>
@@ -46,23 +46,13 @@
                 >{{.Input}}</textarea>
             </section>
 
-            <section class="last-section">
+            <section>
 
-                <section class="banner">
-                    Banner:
-
-                    <select name="banner" class="banner-option">
-                        <option value="standard">Standard</option>
-                        <option value="shadow">Shadow</option>
-                        <option value="thinkertoy">Thinkertoy</option>
-                    </select>
-                </section>
-
-                <section>
-                    <button type="submit" class="btn">
-                        Generate
-                    </button>
-                </section>
+                <section class="banners-result">
+                    <button type="submit" class="btn-result" name="banner" value="standard">Standard</button>
+                    <button type="submit" class="btn-result" name="banner" value="shadow">Shadow</button>
+                    <button type="submit" class="btn-result" name="banner" value="thinkertoy">Thinkertoy</button>
+                </section>              
 
             </section>
 
@@ -74,7 +64,7 @@
         <section class="output">{{.Output}}</section>
 
         <footer class="error">
-            <pre><p>errors: {{.Error}}</p></pre>
+            <pre>errors: {{.Error}}</pre>
         </footer>
     </div>
 

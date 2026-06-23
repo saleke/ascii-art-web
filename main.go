@@ -12,7 +12,8 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	http.HandleFunc("/", handlers.HomeHandler)
-	http.HandleFunc("/ascii-art-web", handlers.AsciiHandler)
+	http.HandleFunc("/ascii-art", handlers.AsciiHandler)
+	http.HandleFunc("/switch-ascii", handlers.SwitchHandler)
 
 	log.Println("======================= Server starting =======================")
 

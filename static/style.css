@@ -105,6 +105,34 @@ textarea{
     gap: 20px;
 }
 
+.banners-result{
+    width: 60%;
+    margin: 0 auto;
+
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.btn-result{
+    flex: 1;
+
+    border: none;
+    border-radius: 11px;
+    height: 45px;
+    font-size: 17px;
+    background-color:#1a2f3b;
+    box-shadow: 0 4px 8px lightseagreen;
+    color: white;
+    cursor: pointer;
+}
+
+.btn-result:hover{
+    background-color: #101d25;
+    box-shadow: 0 6px 9px #146e6a;
+    color: #e0e0e0;
+}
+
 .output{
     width: 90%;
     border-radius: 11px;
