@@ -132,7 +132,4 @@ textarea{
     box-shadow: 0 4px 8px lightseagreen;
     margin: 20px auto 50px;
     padding: 10px;
-
-    overflow-x: auto;
-    white-space: pre-wrap;
 }
