@@ -1,9 +1,146 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/style.css">
+    <style>
+        body{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: sans-serif;
+    background-color:#1a2f3b;
+    color: white;
+}
+
+header{
+    display: block;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 11px;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 20px;
+}
+
+main{
+    margin-top: 50px;
+    flex: 1;
+}
+
+.quick-guide-section{
+    display: block;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 8px lightseagreen;
+    border-radius: 11px;
+    padding: 16px;
+    font-size: 15px;
+    margin: 0 auto;
+    text-align: center;
+    color: white;
+}
+
+.quick-guide{
+    display: none;
+}
+
+.quick-guide-section:hover .quick-guide{
+    display: block;
+    cursor: pointer;
+}
+
+.input{
+    width: 90%;
+    max-width: 800px;
+    margin: 30px auto 0;
+    font-family: sans-serif;
+}
+
+textarea{
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 2px;
+    background-color: #243b4a;
+    border: 2px solid white;
+    color: white;
+}
+
+.banner{
+    width: 250px;
+    height: 20px;
+    border-radius: 11px;
+    box-shadow: 0 4px 8px lightseagreen;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.banner-option{
+    cursor: pointer;
+}
+
+.btn{
+    width: 250px;
+    border: none;
+    border-radius: 11px;
+    height: 50px;
+    font-size: 17px;
+    background-color:#1a2f3b;
+    box-shadow: 0 4px 8px lightseagreen;
+    color: white;
+    cursor: pointer;
+}
+
+.btn:hover{
+    background-color: #101d25;
+    box-shadow: 0 6px 9px #146e6a;
+    color: #e0e0e0;
+}
+
+.last-section{
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.output{
+    width: 90%;
+    border-radius: 11px;
+    border: none;
+    box-shadow: 0 4px 8px lightseagreen;
+    margin: 0 auto;
+    padding: 20px;
+    overflow-x: auto;
+    white-space: pre;
+    font-family: monospace;
+}
+
+.lower{
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.error{
+    width: 90%;
+    border-radius: 11px;
+    border: none;
+    box-shadow: 0 4px 8px lightseagreen;
+    margin: 20px auto 0;
+    padding: 10px;
+}
+    </style>
     <title>ASCII ART WEB</title>
 </head>
 <body>
@@ -13,45 +150,62 @@
         </h1>
         <p>Time To Write <big>BIG</big></p>
     </header>
-    <main>
-        <section class="quick-guide-section">
-            DONT KNOW WHAT TO DO?
-            
-            <details class="quick-guide">
-                <summary>CLICK HERE</summary>
-                <p>Click the input field and type something, 
-                    select a banner and click summit, to
-                    generate the Ascii-Art Equivalence of your
-                    input text.
-                </p>
-                <p style="text-align: center;">Try It Out Right Away!!!</p>
-            </details>
-        <form action="/ascii" method="post">
-            </section>
-            <section class="input">
-                <p>
-                    Enter Text:
-                </p>
-                <textarea type="text" name="input"  rows="7" cols="70" placeholder="Type something..."></textarea>
 
+
+<main>
+    <section class="quick-guide-section">
+        DONT KNOW WHAT TO DO?
+
+        <details class="quick-guide">
+            <summary>CLICK HERE</summary>
+            <p>
+                Click the input field and type something,
+                select a banner and click summit, to
+                generate the Ascii-Art Equivalence of your
+                input text.
+            </p>
+            <p style="text-align: center;">Try It Out Right Away!!!</p>
+        </details>
+    </section>
+
+    <form action="/ascii-art-web" method="post">
+
+        <section class="input">
+            <p>
+                Enter Text:
+            </p>
+
+            <textarea
+                name="input"
+                rows="7"
+                cols="70"
+                placeholder="Type something..."
+            ></textarea>
+
+        </section>
+
+        <br>
+
+        <section class="last-section">
+            <section class="banner">
+                Banner:
+                <select name="banner" class="banner-option">
+                    <option value="standard">Standard</option>
+                    <option value="shadow">Shadow</option>
+                    <option value="thinkertoy">Thinkertoy</option>
+                </select>
             </section>
-            <br>
-            <section class="last-section">
-                <section class="banner">
-                     Banner:
-                      <select name="banner">
-                         <option value="standard">Standard</option>
-                         <option value="shadow">Shadow</option>
-                         <option value="thinkertoy">Thinkertoy</option>
-                      </select>
-                </section>
-                <section>
-                 <button type="submit" class="btn">Generate</button>
-                </section>
+
+            <section>
+                <button type="submit" class="btn">
+                    Generate
+                </button>
             </section>
-        </form>
-      
-    </main>
-    
+        </section>
+
+    </form>
+
+</main>
+
 </body>
 </html>
