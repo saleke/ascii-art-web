@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>ASCII ART WEB</title>
+</head>
+<body>
+    <header>
+        <h1>
+            ASCII ART WEB
+        </h1>
+        <p>Time To Write <big>BIG</big></p>
+    </header>
+
+
+<main>
+    <section class="quick-guide-section">
+        DONT KNOW WHAT TO DO?
+
+        <details class="quick-guide">
+            <summary>CLICK HERE</summary>
+            <p>
+                Click the input field and type something,
+                select a banner and click summit, to
+                generate the Ascii-Art Equivalence of your
+                input text.
+            </p>
+            <p style="text-align: center;">Try It Out Right Away!!!</p>
+        </details>
+    </section>
+
+    <form action="/ascii-art-web" method="post">
+
+        <section class="input">
+            <p>
+                Enter Text:
+            </p>
+
+            <textarea
+                name="input"
+                rows="7"
+                cols="70"
+                placeholder="Type something..."
+            ></textarea>
+
+        </section>
+
+        <br>
+
+        <section class="last-section">
+            <section class="banner">
+                Banner:
+                <select name="banner" class="banner-option">
+                    <option value="standard">Standard</option>
+                    <option value="shadow">Shadow</option>
+                    <option value="thinkertoy">Thinkertoy</option>
+                </select>
+            </section>
+
+            <section>
+                <button type="submit" class="btn">
+                    Generate
+                </button>
+            </section>
+        </section>
+
+    </form>
+
+</main>
+
+</body>
+</html>
