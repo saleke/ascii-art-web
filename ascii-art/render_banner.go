@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-func RenderBanner(glyphMap map[rune][]string, input string) string {
+func RenderBanner(glyphMap map[rune][]string, input string, charHeight int) string {
 	if input == "\n" {
 		return input
 	}
@@ -21,7 +21,7 @@ func RenderBanner(glyphMap map[rune][]string, input string) string {
 			s.WriteRune('\n')
 			continue
 		}
-		for i := range 8 {
+		for i := range charHeight {
 			for _, ch := range line {
 				if ch < 32 || ch > 126 {
 					ch = ' '

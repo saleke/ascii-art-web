@@ -2,6 +2,5 @@ Sweet 13
 Acrobatic, Impossible 12
 Isometric (1 - 4) 11
 Flower power, Terrace, Moon 10
-Graceful, JS Bracket letters, Miniwi, Tmprl 4
-Train, Nuke 6
+Tmprl 4
 Small, Myfont 5

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,66 +9,124 @@
 </head>
 <body>
 
-    <header>
-        <h1>ASCII ART WEB</h1>
-        <p>Time To Write <big>BIG</big></p>
-    </header>
+<header>
+    <h1>ASCII ART WEB</h1>
+    <p>Time To Write <big>BIG</big></p>
+</header>
 
-    <main>
+<main>
 
-        <section class="quick-guide-section">
-            DONT KNOW WHAT TO DO?
+    <section class="quick-guide-section">
+        DONT KNOW WHAT TO DO?
 
-            <details class="quick-guide">
-                <summary>CLICK HERE</summary>
+        <details class="quick-guide">
+            <summary>CLICK HERE</summary>
 
-                <p>
-                    Click the input field and type something,
-                    select a banner and click summit, to
-                    generate the Ascii-Art Equivalence of your
-                    input text.
-                </p>
+            <p>
+                Click the input field and type something,
+                select a banner and click summit, to
+                generate the Ascii-Art Equivalence of your
+                input text.
+            </p>
 
-                <p style="text-align: center;">
-                    Try It Out Right Away!!!
-                </p>
-            </details>
+            <p style="text-align: center;">
+                Try It Out Right Away!!!
+            </p>
+        </details>
+    </section>
+
+    <form action="/switch-ascii" method="get">
+
+        <section class="input">
+            <p>Enter Text:</p>
+
+            <textarea
+                name="input"
+                rows="7"
+                placeholder="Type something..."
+            >{{.Input}}</textarea>
         </section>
 
-        <form action="/switch-ascii" method="get">
+            <section class="banners-result">
 
-            <section class="input">
-                <p>Enter Text:</p>
+                <button
+                    type="submit"
+                    class="btn-result"
+                    name="banner"
+                    value="graffiti">
+                    Graffiti
+                </button>
 
-                <textarea
-                    name="input"
-                    rows="7"
-                    placeholder="Type something..."
-                >{{.Input}}</textarea>
+                <button
+                    type="submit"
+                    class="btn-result"
+                    name="banner"
+                    value="acrobat">
+                    Acrobat
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-result"
+                    name="banner"
+                    value="shadow">
+                    Shadow
+                </button>
+
+                <select
+                    class="btn-result more-banners"
+                    name="banner"
+                    onchange="this.form.submit()">
+
+                    <option selected disabled>
+                        More ▼
+                    </option>
+                    <option value="standard">
+                        Standard
+                    </option>
+                    <option value="thinkertoy">
+                        Thinkertoy
+                    </option>
+
+
+                    <option value="graceful">
+                        Graceful
+                    </option>
+
+                    <option value="merlin">
+                        Merlin
+                    </option>
+
+                    <option value="miniwi">
+                        Miniwi
+                    </option>
+                    <option value="modular">
+                        Modular
+                    </option>
+                    <option value="ogre">
+                        Ogre
+                    </option>
+                    <option value="rectangels">
+                        Rectangles
+                    </option>
+                    <option value="temper">Temper</option>
+
+                </select>
+
             </section>
 
-            <section>
+    </form>
 
-                <section class="banners-result">
-                     <button type="submit" class="btn-result" name="banner" value="graffiti">Graffiti</button>
-                    <button type="submit" class="btn-result" name="banner" value="standard">Standard</button>
-                    <button type="submit" class="btn-result" name="banner" value="shadow">Shadow</button>
-                    <button type="submit" class="btn-result" name="banner" value="thinkertoy">Thinkertoy</button>
-                </section>              
+</main>
 
-            </section>
+<div class="lower">
+    <section class="output">{{.Output}}</section>
 
-        </form>
+    <footer class="error">
+        <pre>errors: {{.Error}}</pre>
+    </footer>
+</div>
 
-    </main>
-
-    <div class="lower">
-        <section class="output">{{.Output}}</section>
-
-        <footer class="error">
-            <pre>errors: {{.Error}}</pre>
-        </footer>
-    </div>
 
 </body>
 </html>

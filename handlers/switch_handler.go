@@ -39,6 +39,7 @@ func SwitchHandler(w http.ResponseWriter, r *http.Request) {
 
 	data.Output, data.Error = ascii_art.Generate(data.Input, data.BannerFile)
 	if data.Error != nil {
+		data.Error = errors.New("invalid banner name")
 		tmpl.Execute(w, data)
 		return
 	}
