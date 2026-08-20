@@ -1,132 +1,87 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/style.css">
-    <title>ASCII ART WEB</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/style.css">
+  <title>Result — ASCII Studio</title>
 </head>
 <body>
-
-<header>
-    <h1>ASCII ART WEB</h1>
-    <p>Time To Write <big>BIG</big></p>
-</header>
-
-<main>
-
-    <section class="quick-guide-section">
-        DONT KNOW WHAT TO DO?
-
-        <details class="quick-guide">
-            <summary>CLICK HERE</summary>
-
-            <p>
-                Click the input field and type something,
-                select a banner and click summit, to
-                generate the Ascii-Art Equivalence of your
-                input text.
-            </p>
-
-            <p style="text-align: center;">
-                Try It Out Right Away!!!
-            </p>
-        </details>
+  <header class="site-header">
+    <a class="brand" href="/">ASCII<span>Studio</span></a>
+    <a class="header-link" href="/">← New creation</a>
+  </header>
+  <main class="shell result-shell">
+    <section class="result-heading">
+      <p id="banner-label" class="eyebrow">YOUR CREATION · {{.Banner}}</p>
+      <h1>That’s a<br><em>statement.</em></h1>
     </section>
-
-    <form action="/switch-ascii" method="get">
-
-        <section class="input">
-            <p>Enter Text:</p>
-
-            <textarea
-                name="input"
-                rows="7"
-                placeholder="Type something..."
-            >{{.Input}}</textarea>
-        </section>
-
-            <section class="banners-result">
-
-                <button
-                    type="submit"
-                    class="btn-result"
-                    name="banner"
-                    value="graffiti">
-                    Graffiti
-                </button>
-
-                <button
-                    type="submit"
-                    class="btn-result"
-                    name="banner"
-                    value="acrobat">
-                    Acrobat
-                </button>
-
-                <button
-                    type="submit"
-                    class="btn-result"
-                    name="banner"
-                    value="shadow">
-                    Shadow
-                </button>
-
-                <select
-                    class="btn-result more-banners"
-                    name="banner"
-                    onchange="this.form.submit()">
-
-                    <option selected disabled>
-                        More ▼
-                    </option>
-                    <option value="standard">
-                        Standard
-                    </option>
-                    <option value="thinkertoy">
-                        Thinkertoy
-                    </option>
-
-
-                    <option value="graceful">
-                        Graceful
-                    </option>
-
-                    <option value="merlin">
-                        Merlin
-                    </option>
-
-                    <option value="miniwi">
-                        Miniwi
-                    </option>
-                    <option value="modular">
-                        Modular
-                    </option>
-                    <option value="ogre">
-                        Ogre
-                    </option>
-                    <option value="rectangels">
-                        Rectangles
-                    </option>
-                    <option value="temper">Temper</option>
-
-                </select>
-
-            </section>
-
+    {{if .Error}}<div class="alert" role="alert">{{.Error}}</div>{{end}}
+    {{if .Output}}
+    <section class="output-card" aria-live="polite">
+      <div class="output-toolbar"><span>ASCII OUTPUT</span><span id="preview-status" class="preview-status">Updated</span><button type="button" class="copy-button" onclick="copyOutput(this)">Copy output</button></div>
+      <pre id="output">{{.Output}}</pre>
+    </section>
+    {{end}}
+    <form id="refine-form" class="refine-form" action="/ascii-art" method="post">
+      <label class="field-label" for="input">Refine your message</label>
+      <textarea id="input" name="input" rows="4" maxlength="500">{{.Input}}</textarea>
+      <div class="form-row">
+        <div class="field-group"><label class="field-label" for="banner">Try another style</label><select id="banner" name="banner">{{range .Banners}}<option value="{{.}}"{{if eq . $.Banner}} selected{{end}}>{{.}}</option>{{end}}</select></div>
+        <button class="primary-button" type="submit">Regenerate <span>↗</span></button>
+      </div>
     </form>
+  </main>
+  <footer class="site-footer"><span>ASCII Studio</span><a href="/">Create another →</a></footer>
+<script>
+  (() => {
+    const form = document.getElementById('refine-form');
+    const input = document.getElementById('input');
+    const banner = document.getElementById('banner');
+    const output = document.getElementById('output');
+    const status = document.getElementById('preview-status');
+    const bannerLabel = document.getElementById('banner-label');
+    if (!form || !input || !banner || !output || !status) return;
 
-</main>
+    let timer;
+    let requestId = 0;
+    const update = () => {
+      if (!input.value.trim()) {
+        status.textContent = 'Enter text to preview';
+        return;
+      }
+      const currentRequest = ++requestId;
+      status.textContent = 'Updating…';
+      const body = new URLSearchParams(new FormData(form));
+      fetch(form.action, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' },
+        body
+      }).then(response => response.json().then(data => ({ok: response.ok, data})))
+        .then(({ok, data}) => {
+          if (currentRequest !== requestId) return;
+          if (!ok) throw new Error(data.error || 'Unable to update preview');
+          output.textContent = data.output;
+          if (bannerLabel) bannerLabel.textContent = 'YOUR CREATION · ' + data.banner;
+          status.textContent = 'Updated';
+        })
+        .catch(error => {
+          if (currentRequest !== requestId) return;
+          status.textContent = error.message;
+        });
+    };
+    const schedule = () => { clearTimeout(timer); timer = setTimeout(update, 350); };
+    input.addEventListener('input', schedule);
+    banner.addEventListener('change', update);
+  })();
 
-<div class="lower">
-    <section class="output">{{.Output}}</section>
-
-    <footer class="error">
-        <pre>errors: {{.Error}}</pre>
-    </footer>
-</div>
-
-
+  function copyOutput(button) {
+    navigator.clipboard.writeText(document.getElementById('output').innerText).then(() => {
+      const original = button.textContent;
+      button.textContent = 'Copied';
+      setTimeout(() => { button.textContent = original; }, 1400);
+    });
+  }
+</script>
 </body>
 </html>

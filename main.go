@@ -7,15 +7,20 @@ import (
 )
 
 func main() {
+	mux := http.NewServeMux()
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+	mux.HandleFunc("/", handlers.HomeHandler)
+	mux.HandleFunc("/ascii-art", handlers.AsciiHandler)
+	server := &http.Server{Addr: ":8080", Handler: logging(mux)}
+	log.Printf("ASCII Art Web listening on http://localhost%s", server.Addr)
+	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		log.Fatal(err)
+	}
+}
 
-	fs := http.FileServer(http.Dir("./static"))
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
-
-	http.HandleFunc("/", handlers.HomeHandler)
-	http.HandleFunc("/ascii-art", handlers.AsciiHandler)
-	http.HandleFunc("/switch-ascii", handlers.SwitchHandler)
-
-	log.Println("======================= Server starting =======================")
-
-	panic(http.ListenAndServe(":8080", nil))
+func logging(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("%s %s", r.Method, r.URL.Path)
+		next.ServeHTTP(w, r)
+	})
 }

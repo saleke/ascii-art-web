@@ -1,79 +1,45 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style.css">
-    <title>ASCII ART WEB</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Turn your words into expressive ASCII art.">
+  <link rel="stylesheet" href="/static/style.css">
+  <title>ASCII Studio — Text to ASCII Art</title>
 </head>
 <body>
-    <header>
-        <h1>
-            ASCII ART WEB
-        </h1>
-        <p>Time To Write <big>BIG</big></p>
-    </header>
-
-
-<main>
-    <section class="quick-guide-section">
-        DONT KNOW WHAT TO DO?
-
-        <details class="quick-guide">
-            <summary>CLICK HERE</summary>
-            <p>
-                Click the input field and type something,
-                select a banner and click summit, to
-                generate the Ascii-Art Equivalence of your
-                input text.
-            </p>
-            <p style="text-align: center;">Try It Out Right Away!!!</p>
-        </details>
+  <header class="site-header">
+    <a class="brand" href="/">ASCII<span>Studio</span></a>
+    <span class="status-pill"><i></i> Ready to create</span>
+  </header>
+  <main class="shell">
+    <section class="hero">
+      <p class="eyebrow">TEXT → ASCII ART</p>
+      <h1>Make your words<br><em>impossible to ignore.</em></h1>
+      <p class="hero-copy">Choose a style, type your message, and turn it into bold, shareable character art in seconds.</p>
     </section>
-
-    <form action="/ascii-art" method="post">
-
-        <section class="input">
-            <p>
-                Enter Text:
-            </p>
-
-            <textarea
-                name="input"
-                rows="7"
-                cols="70"
-                placeholder="Type something..."
-            ></textarea>
-
-        </section>
-
-        <br>
-
-        <section class="last-section">
-            <section class="banner">
-                Banner:
-                <select name="banner" class="banner-option">
-                    <option value="graffiti">Graffitti</option>
-                    <option value="standard">Standard</option>
-                    <option value="shadow">Shadow</option>
-                    <option value="acrobat">Acrobat</option>
-                    <option value="merlin">Merlin</option>
-                    <option value="temper">Temper</option>
-                    <option value="thinkertoy">Thinkertoy</option>
-                </select>
-            </section>
-
-            <section>
-                <button type="submit" class="btn">
-                    Generate
-                </button>
-            </section>
-        </section>
-
-    </form>
-
-</main>
-
+    <section class="studio-card">
+      <form action="/ascii-art" method="post">
+        <label class="field-label" for="input">Your message</label>
+        <textarea id="input" name="input" rows="5" maxlength="500" placeholder="Type something memorable…" autofocus></textarea>
+        <div class="form-row">
+          <div class="field-group">
+            <label class="field-label" for="banner">Choose a style</label>
+            <select id="banner" name="banner">
+              {{range .Banners}}<option value="{{.}}"{{if eq . $.Banner}} selected{{end}}>{{.}}</option>{{end}}
+            </select>
+          </div>
+          <button class="primary-button" type="submit">Generate art <span>↗</span></button>
+        </div>
+      </form>
+      <div class="tips"><span>⌘</span> Tip: line breaks are supported. Try a short phrase for the clearest result.</div>
+    </section>
+    <section class="feature-grid" aria-label="Highlights">
+      <div><strong>13</strong><span>distinct styles</span></div>
+      <div><strong>95</strong><span>printable characters</span></div>
+      <div><strong>∞</strong><span>ways to express yourself</span></div>
+    </section>
+  </main>
+  <footer class="site-footer"><span>Built for the web · Runs locally on Go</span><span>Fast · Private · No sign-up</span></footer>
 </body>
 </html>

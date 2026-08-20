@@ -1,18 +1,32 @@
 package handlers
 
 import (
-	"fmt"
+	"bytes"
+	"html/template"
 	"net/http"
-	"os"
+	"path/filepath"
 )
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-
-	file := "templates/index.html"
-	resp, err := os.ReadFile(file)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
 		return
 	}
-	fmt.Fprint(w, string(resp))
+	if r.Method != http.MethodGet {
+		w.Header().Set("Allow", http.MethodGet)
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	tmpl, err := template.ParseFiles(filepath.Join(projectRoot(), "templates", "index.html"))
+	if err != nil {
+		http.Error(w, "home template is unavailable", http.StatusInternalServerError)
+		return
+	}
+	var page bytes.Buffer
+	if err := tmpl.Execute(&page, PageData{Banner: "standard", Banners: BannerNames()}); err != nil {
+		http.Error(w, "home template could not be rendered", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	_, _ = page.WriteTo(w)
 }
