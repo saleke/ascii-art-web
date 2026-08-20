@@ -17,13 +17,13 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	tmpl, err := template.ParseFiles(filepath.Join(projectRoot(), "templates", "index.html"))
+	tmpl, err := template.ParseFiles(filepath.Join(ProjectRoot(), "templates", "index.html"))
 	if err != nil {
 		http.Error(w, "home template is unavailable", http.StatusInternalServerError)
 		return
 	}
 	var page bytes.Buffer
-	if err := tmpl.Execute(&page, PageData{Banner: "standard", Banners: BannerNames()}); err != nil {
+	if err := tmpl.Execute(&page, PageData{Banner: "standard", Banners: BannerNames(), Project: projectInfo()}); err != nil {
 		http.Error(w, "home template could not be rendered", http.StatusInternalServerError)
 		return
 	}

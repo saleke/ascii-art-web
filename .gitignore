@@ -1,0 +1,25 @@
+/ascii-art-web
+/bin/
+.env
+.env.*
+!.env.example
+details.txt
+instruction.txt
+# secrets — never commit these
+.env.local
+.env*.local
+
+# dependencies
+node_modules/
+
+# build output
+.next/
+out/
+build/
+
+# system files
+.DS_Store
+*.log
+
+# editor
+.vscode/

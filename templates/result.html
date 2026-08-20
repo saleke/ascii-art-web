@@ -4,11 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/static/style.css">
-  <title>Result — ASCII Studio</title>
+  <meta name="description" content="Generate and copy ASCII art with configurable banner styles.">
+  <title>Result — {{.Project.Name}}</title>
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="/">ASCII<span>Studio</span></a>
+    <a class="brand" href="/" aria-label="ASCII Art Web home">ASCII <span>Art Web</span></a>
     <a class="header-link" href="/">← New creation</a>
   </header>
   <main class="shell result-shell">
@@ -16,23 +17,23 @@
       <p id="banner-label" class="eyebrow">YOUR CREATION · {{.Banner}}</p>
       <h1>That’s a<br><em>statement.</em></h1>
     </section>
-    {{if .Error}}<div class="alert" role="alert">{{.Error}}</div>{{end}}
+    {{if .Error}}<div class="alert" id="form-error" role="alert">{{.Error}}</div>{{end}}
     {{if .Output}}
     <section class="output-card" aria-live="polite">
-      <div class="output-toolbar"><span>ASCII OUTPUT</span><span id="preview-status" class="preview-status">Updated</span><button type="button" class="copy-button" onclick="copyOutput(this)">Copy output</button></div>
-      <pre id="output">{{.Output}}</pre>
+      <div class="output-toolbar"><span>ASCII OUTPUT</span><span id="preview-status" class="preview-status" aria-live="polite">Updated</span><button type="button" class="copy-button" onclick="copyOutput(this)">Copy output</button></div>
+      <pre id="output" tabindex="0" aria-label="Generated ASCII art">{{.Output}}</pre>
     </section>
     {{end}}
     <form id="refine-form" class="refine-form" action="/ascii-art" method="post">
       <label class="field-label" for="input">Refine your message</label>
-      <textarea id="input" name="input" rows="4" maxlength="500">{{.Input}}</textarea>
+      <textarea id="input" name="input" rows="4" maxlength="500"{{if .Error}} aria-describedby="form-error"{{end}} required>{{.Input}}</textarea>
       <div class="form-row">
         <div class="field-group"><label class="field-label" for="banner">Try another style</label><select id="banner" name="banner">{{range .Banners}}<option value="{{.}}"{{if eq . $.Banner}} selected{{end}}>{{.}}</option>{{end}}</select></div>
         <button class="primary-button" type="submit">Regenerate <span>↗</span></button>
       </div>
     </form>
   </main>
-  <footer class="site-footer"><span>ASCII Studio</span><a href="/">Create another →</a></footer>
+  <footer class="site-footer"><div><strong>{{.Project.Name}}</strong><span>Built by {{.Project.DeveloperName}} · {{.Project.DeveloperRole}}</span></div><nav aria-label="Developer links"><a href="{{.Project.RepositoryURL}}" target="_blank" rel="noreferrer">GitHub</a><span aria-hidden="true">·</span><a href="{{.Project.PortfolioURL}}" target="_blank" rel="noreferrer">Portfolio</a></nav><span>© {{.Project.CopyrightYear}} {{.Project.DeveloperName}}</span></footer>
 <script>
   (() => {
     const form = document.getElementById('refine-form');
@@ -80,6 +81,8 @@
       const original = button.textContent;
       button.textContent = 'Copied';
       setTimeout(() => { button.textContent = original; }, 1400);
+    }).catch(() => {
+      button.textContent = 'Copy failed';
     });
   }
 </script>

@@ -4,18 +4,34 @@ import (
 	"ascii-art-web/handlers"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
+	"time"
 )
 
 func main() {
-	mux := http.NewServeMux()
-	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
-	mux.HandleFunc("/", handlers.HomeHandler)
-	mux.HandleFunc("/ascii-art", handlers.AsciiHandler)
-	server := &http.Server{Addr: ":8080", Handler: logging(mux)}
-	log.Printf("ASCII Art Web listening on http://localhost%s", server.Addr)
+	server := &http.Server{Addr: serverAddress(), Handler: appHandler(), ReadHeaderTimeout: 5 * time.Second, IdleTimeout: 60 * time.Second}
+	log.Printf("ASCII Art Web listening on %s", server.Addr)
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatal(err)
 	}
+}
+
+func appHandler() http.Handler {
+	mux := http.NewServeMux()
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(filepath.Join(handlers.ProjectRoot(), "static")))))
+	mux.HandleFunc("/", handlers.HomeHandler)
+	mux.HandleFunc("/ascii-art", handlers.AsciiHandler)
+	return logging(mux)
+}
+
+func serverAddress() string {
+	port := strings.TrimPrefix(strings.TrimSpace(os.Getenv("PORT")), ":")
+	if port == "" {
+		port = "8080"
+	}
+	return ":" + port
 }
 
 func logging(next http.Handler) http.Handler {

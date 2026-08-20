@@ -10,6 +10,11 @@
 }
 * { box-sizing: border-box; }
 
+a:focus-visible, button:focus-visible, textarea:focus-visible, select:focus-visible, pre:focus-visible {
+  outline: 3px solid var(--accent-dark);
+  outline-offset: 3px;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -49,10 +54,13 @@ body::before {
   font-weight: 700;
   text-decoration: none;
   font-size: 1.35rem;
-  letter-spacing: -.04em;
+  letter-spacing: 0;
 }
 
 .brand span { font-weight: 400; }
+
+.header-nav { display: flex; gap: 18px; font: 500 .75rem ui-monospace, monospace; }
+.header-nav a, .site-footer a { color: var(--ink); text-underline-offset: 4px; }
 
 .status-pill,
 .preview-status {
@@ -98,16 +106,16 @@ body::before {
 .eyebrow {
   margin: 0;
   font: 500 .72rem ui-monospace, monospace;
-  letter-spacing: .16em;
+  letter-spacing: 0;
   color: var(--accent-dark);
   text-transform: uppercase;
 }
 
 .hero h1,
 .result-heading h1 {
-  font-size: clamp(3.25rem, 7vw, 6.5rem);
+  font-size: 5.5rem;
   line-height: .93;
-  letter-spacing: -.045em;
+  letter-spacing: 0;
   margin: 18px 0 24px;
 }
 
@@ -124,6 +132,9 @@ body::before {
   max-width: 560px;
 }
 
+.project-summary { max-width: 680px; margin: 24px 0 0; color: var(--muted); font-size: .9rem; line-height: 1.55; }
+.project-summary span { display: block; margin-top: 7px; color: var(--accent-dark); font: 500 .72rem ui-monospace, monospace; }
+
 .studio-card,
 .output-card {
   margin-top: 55px;
@@ -139,7 +150,7 @@ body::before {
   margin-bottom: 10px;
   font: 500 .75rem ui-monospace, monospace;
   text-transform: uppercase;
-  letter-spacing: .12em;
+  letter-spacing: 0;
   color: var(--muted);
 }
 
@@ -233,14 +244,14 @@ select:focus {
 .feature-grid strong {
   display: block;
   font-size: 2rem;
-  letter-spacing: -.04em;
+  letter-spacing: 0;
 }
 
 .feature-grid span {
   font: 500 .72rem ui-monospace, monospace;
   color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: .08em;
+  letter-spacing: 0;
 }
 
 .alert {
@@ -265,7 +276,7 @@ select:focus {
   border-bottom: 1px solid var(--line);
   color: var(--muted);
   font: 500 .7rem ui-monospace, monospace;
-  letter-spacing: .12em;
+  letter-spacing: 0;
 }
 
 .preview-status {
@@ -292,13 +303,15 @@ select:focus {
 }
 
 .output-card pre {
+  max-width: 100%;
   min-height: 170px;
   margin: 0;
   padding: 28px;
   overflow: auto;
+  white-space: pre;
   background: #17211f;
   color: #f1f4e9;
-  font: clamp(.55rem, 1.1vw, .85rem)/1.15 ui-monospace, monospace;
+  font: .75rem/1.15 ui-monospace, monospace;
 }
 
 .refine-form { margin-top: 32px; }
@@ -308,11 +321,18 @@ select:focus {
 .site-footer {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
   padding: 22px 0;
   border-top: 1px solid var(--line);
   color: var(--muted);
   font: .75rem ui-monospace, monospace;
 }
+
+.site-footer > div { display: flex; flex-direction: column; gap: 5px; }
+.site-footer strong { color: var(--ink); font-size: .8rem; }
+.site-footer nav { display: flex; align-items: center; gap: 8px; }
 
 @media (max-width: 680px) {
   .site-header,
@@ -325,13 +345,12 @@ select:focus {
 
   .hero h1,
   .result-heading h1 {
-    font-size: clamp(3rem, 16vw, 5rem);
+    font-size: 3.25rem;
   }
 
-  .studio-card,
-  .output-card {
-    padding: 22px;
-  }
+  .studio-card { padding: 22px; }
+
+  .output-card { padding: 0; }
 
   .form-row {
     flex-direction: column;
@@ -349,6 +368,10 @@ select:focus {
     flex-direction: column;
     gap: 8px;
   }
+
+  .site-header { align-items: flex-start; gap: 20px; }
+  .header-nav { gap: 12px; }
+  .output-card pre { padding: 20px; font-size: .55rem; }
 
   .output-toolbar {
     flex-wrap: wrap;

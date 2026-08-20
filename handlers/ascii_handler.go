@@ -6,29 +6,50 @@ import (
 	"encoding/json"
 	"html/template"
 	"net/http"
+	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
 )
 
-func projectRoot() string {
+func ProjectRoot() string {
+	if root := strings.TrimSpace(os.Getenv("APP_ROOT")); root != "" {
+		return root
+	}
 	_, file, _, _ := runtime.Caller(0)
-	return filepath.Dir(filepath.Dir(file))
+	callerRoot := filepath.Dir(filepath.Dir(file))
+	if directoryExists(filepath.Join(callerRoot, "templates")) {
+		return callerRoot
+	}
+	if workingDirectory, err := os.Getwd(); err == nil {
+		return workingDirectory
+	}
+	return callerRoot
 }
 
 var allowedBanners = map[string]string{
-	"acrobat": filepath.Join(projectRoot(), "banners", "acrobat.txt"), "graceful": filepath.Join(projectRoot(), "banners", "graceful.txt"),
-	"graffiti": filepath.Join(projectRoot(), "banners", "graffiti.txt"), "merlin": filepath.Join(projectRoot(), "banners", "merlin.txt"),
-	"miniwi": filepath.Join(projectRoot(), "banners", "miniwi.txt"), "modular": filepath.Join(projectRoot(), "banners", "modular.txt"),
-	"ogre": filepath.Join(projectRoot(), "banners", "ogre.txt"), "rectangles": filepath.Join(projectRoot(), "banners", "rectangles.txt"),
-	"shadow": filepath.Join(projectRoot(), "banners", "shadow.txt"), "standard": filepath.Join(projectRoot(), "banners", "standard.txt"),
-	"temper": filepath.Join(projectRoot(), "banners", "temper.txt"), "thinkertoy": filepath.Join(projectRoot(), "banners", "thinkertoy.txt"),
-	"train": filepath.Join(projectRoot(), "banners", "train.txt"),
+	"acrobat": "acrobat.txt", "graceful": "graceful.txt", "graffiti": "graffiti.txt", "merlin": "merlin.txt",
+	"miniwi": "miniwi.txt", "modular": "modular.txt", "ogre": "ogre.txt", "rectangles": "rectangles.txt",
+	"shadow": "shadow.txt", "standard": "standard.txt", "temper": "temper.txt", "thinkertoy": "thinkertoy.txt", "train": "train.txt",
+}
+
+func directoryExists(path string) bool {
+	info, err := os.Stat(path)
+	return err == nil && info.IsDir()
+}
+
+func bannerPath(name string) (string, bool) {
+	filename, ok := allowedBanners[name]
+	if !ok {
+		return "", false
+	}
+	return filepath.Join(ProjectRoot(), "banners", filename), true
 }
 
 type PageData struct {
 	Input, Output, Banner, Error string
 	Banners                      []string
+	Project                      ProjectInfo
 }
 
 func AsciiHandler(w http.ResponseWriter, r *http.Request) {
@@ -46,7 +67,7 @@ func AsciiHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "invalid form data", http.StatusBadRequest)
 		return
 	}
-	data := PageData{Input: r.FormValue("input"), Banner: strings.ToLower(strings.TrimSpace(r.FormValue("banner"))), Banners: BannerNames()}
+	data := PageData{Input: r.FormValue("input"), Banner: strings.ToLower(strings.TrimSpace(r.FormValue("banner"))), Banners: BannerNames(), Project: projectInfo()}
 	api := strings.Contains(strings.ToLower(r.Header.Get("Accept")), "application/json")
 	if strings.TrimSpace(data.Input) == "" {
 		if api {
@@ -64,7 +85,7 @@ func AsciiHandler(w http.ResponseWriter, r *http.Request) {
 		renderResult(w, data, "Please keep your message under 500 characters.", http.StatusBadRequest)
 		return
 	}
-	bannerFile, ok := allowedBanners[data.Banner]
+	bannerFile, ok := bannerPath(data.Banner)
 	if !ok {
 		if api {
 			writeJSON(w, data, "Please choose a supported banner.", http.StatusBadRequest)
@@ -91,7 +112,8 @@ func AsciiHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func CleanBannerFile(name string) string {
-	return allowedBanners[strings.ToLower(strings.TrimSpace(name))]
+	path, _ := bannerPath(strings.ToLower(strings.TrimSpace(name)))
+	return path
 }
 func BannerNames() []string {
 	return []string{"standard", "shadow", "thinkertoy", "graffiti", "acrobat", "merlin", "temper", "graceful", "miniwi", "modular", "ogre", "rectangles", "train"}
@@ -99,7 +121,7 @@ func BannerNames() []string {
 
 func renderResult(w http.ResponseWriter, data PageData, message string, status int) {
 	data.Error = message
-	tmpl, err := template.ParseFiles(filepath.Join(projectRoot(), "templates", "result.html"))
+	tmpl, err := template.ParseFiles(filepath.Join(ProjectRoot(), "templates", "result.html"))
 	if err != nil {
 		http.Error(w, "result template is unavailable", http.StatusInternalServerError)
 		return

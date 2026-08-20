@@ -3,25 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Turn your words into expressive ASCII art.">
+  <meta name="description" content="{{.Project.Description}}">
   <link rel="stylesheet" href="/static/style.css">
-  <title>ASCII Studio — Text to ASCII Art</title>
+  <title>{{.Project.Name}} — Text to ASCII Art</title>
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="/">ASCII<span>Studio</span></a>
-    <span class="status-pill"><i></i> Ready to create</span>
+    <a class="brand" href="/" aria-label="ASCII Art Web home">ASCII <span>Art Web</span></a>
+    <nav class="header-nav" aria-label="Project links"><a href="{{.Project.RepositoryURL}}" target="_blank" rel="noreferrer">GitHub</a><a href="{{.Project.PortfolioURL}}" target="_blank" rel="noreferrer">Portfolio</a></nav>
   </header>
   <main class="shell">
     <section class="hero">
       <p class="eyebrow">TEXT → ASCII ART</p>
       <h1>Make your words<br><em>impossible to ignore.</em></h1>
       <p class="hero-copy">Choose a style, type your message, and turn it into bold, shareable character art in seconds.</p>
+      <p class="project-summary">{{.Project.Description}} <span>{{.Project.Technologies}}</span></p>
     </section>
     <section class="studio-card">
       <form action="/ascii-art" method="post">
         <label class="field-label" for="input">Your message</label>
-        <textarea id="input" name="input" rows="5" maxlength="500" placeholder="Type something memorable…" autofocus></textarea>
+        <textarea id="input" name="input" rows="5" maxlength="500" placeholder="Type something memorable…" aria-describedby="input-tip" required autofocus></textarea>
         <div class="form-row">
           <div class="field-group">
             <label class="field-label" for="banner">Choose a style</label>
@@ -32,7 +33,7 @@
           <button class="primary-button" type="submit">Generate art <span>↗</span></button>
         </div>
       </form>
-      <div class="tips"><span>⌘</span> Tip: line breaks are supported. Try a short phrase for the clearest result.</div>
+      <div class="tips" id="input-tip"><span aria-hidden="true">⌘</span> Tip: line breaks are supported. Try a short phrase for the clearest result.</div>
     </section>
     <section class="feature-grid" aria-label="Highlights">
       <div><strong>13</strong><span>distinct styles</span></div>
@@ -40,6 +41,6 @@
       <div><strong>∞</strong><span>ways to express yourself</span></div>
     </section>
   </main>
-  <footer class="site-footer"><span>Built for the web · Runs locally on Go</span><span>Fast · Private · No sign-up</span></footer>
+  <footer class="site-footer"><div><strong>{{.Project.Name}}</strong><span>Built by {{.Project.DeveloperName}} · {{.Project.DeveloperRole}}</span></div><nav aria-label="Developer links"><a href="{{.Project.RepositoryURL}}" target="_blank" rel="noreferrer">GitHub</a><span aria-hidden="true">·</span><a href="{{.Project.PortfolioURL}}" target="_blank" rel="noreferrer">Portfolio</a></nav><span>© {{.Project.CopyrightYear}} {{.Project.DeveloperName}}</span></footer>
 </body>
 </html>

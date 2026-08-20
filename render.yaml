@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: ascii-art-web
+    runtime: go
+    buildCommand: go build -o bin/ascii-art-web .
+    startCommand: ./bin/ascii-art-web
+    healthCheckPath: /
+    envVars:
+      - key: PORTFOLIO_URL
+        value: https://saleke.vercel.app
+      - key: GITHUB_REPOSITORY_URL
+        value: https://github.com/saleke/ascii-art-web
