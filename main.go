@@ -11,18 +11,10 @@ import (
 	"time"
 )
 
-//go:embed templates
-var templatesFS embed.FS
-
-//go:embed banners
-var bannersFS embed.FS
-
 //go:embed static
 var staticFS embed.FS
 
 func main() {
-	handlers.TemplatesFS = templatesFS
-	handlers.BannersFS = bannersFS
 	server := &http.Server{Addr: serverAddress(), Handler: appHandler(), ReadHeaderTimeout: 5 * time.Second, IdleTimeout: 60 * time.Second}
 	log.Printf("ASCII Art Web listening on %s", server.Addr)
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
