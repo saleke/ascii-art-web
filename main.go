@@ -2,15 +2,27 @@ package main
 
 import (
 	"ascii-art-web/handlers"
+	"embed"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
 )
 
+//go:embed templates
+var templatesFS embed.FS
+
+//go:embed banners
+var bannersFS embed.FS
+
+//go:embed static
+var staticFS embed.FS
+
 func main() {
+	handlers.TemplatesFS = templatesFS
+	handlers.BannersFS = bannersFS
 	server := &http.Server{Addr: serverAddress(), Handler: appHandler(), ReadHeaderTimeout: 5 * time.Second, IdleTimeout: 60 * time.Second}
 	log.Printf("ASCII Art Web listening on %s", server.Addr)
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -20,7 +32,11 @@ func main() {
 
 func appHandler() http.Handler {
 	mux := http.NewServeMux()
-	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(filepath.Join(handlers.ProjectRoot(), "static")))))
+	staticContent, err := fs.Sub(staticFS, "static")
+	if err != nil {
+		log.Fatal(err)
+	}
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(staticContent))))
 	mux.HandleFunc("/", handlers.HomeHandler)
 	mux.HandleFunc("/ascii-art", handlers.AsciiHandler)
 	return logging(mux)

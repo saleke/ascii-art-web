@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"html/template"
 	"net/http"
-	"path/filepath"
 )
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
@@ -17,7 +16,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	tmpl, err := template.ParseFiles(filepath.Join(ProjectRoot(), "templates", "index.html"))
+	tmpl, err := template.ParseFS(TemplatesFS, "templates/index.html")
 	if err != nil {
 		http.Error(w, "home template is unavailable", http.StatusInternalServerError)
 		return
